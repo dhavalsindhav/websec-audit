@@ -1,0 +1,86 @@
+{
+  "name": "websec-audit",
+  "version": "1.0.0",
+  "description": "A universal security scanning and audit tool for websites",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./frontend": {
+      "import": "./dist/frontend/index.mjs",
+      "require": "./dist/frontend/index.js",
+      "types": "./dist/frontend/index.d.ts"
+    },
+    "./backend": {
+      "import": "./dist/backend/index.mjs",
+      "require": "./dist/backend/index.js",
+      "types": "./dist/backend/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --emitDeclarationOnly --declaration && tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "security",
+    "scanner",
+    "audit",
+    "headers",
+    "tls",
+    "dns",
+    "recon",
+    "frontend",
+    "backend"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/username/websec-audit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/username/websec-audit/issues"
+  },
+  "homepage": "https://github.com/username/websec-audit#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/cheerio": "^1.0.0",
+    "@types/node": "^18.19.112",
+    "eslint": "^8.42.0",
+    "prettier": "^2.8.8",
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.32.2"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dns2": "^2.1.0",
+    "retire": "^4.1.1",
+    "wappalyzer-core": "^6.10.26",
+    "whois-json": "^2.0.4"
+  },
+  "browser": {
+    "dns": false,
+    "net": false,
+    "tls": false,
+    "util": false,
+    "./dist/backend/index.js": false,
+    "./dist/backend/index.mjs": false
+  }
+}
