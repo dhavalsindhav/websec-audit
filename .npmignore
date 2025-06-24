@@ -1,0 +1,58 @@
+# Source code (TypeScript)
+# We don't publish the TypeScript source, only the compiled JavaScript
+src/
+
+# Development and build files
+tsconfig.json
+tsup.config.ts
+.github/
+.vscode/
+.idea/
+
+# Test files and folders
+test/
+tests/
+__tests__/
+verify.js
+verify-*.js
+*.test.js
+*.spec.js
+*.test.ts
+*.spec.ts
+VERIFICATION_RESULTS.md
+
+# Documentation that shouldn't be in the package
+docs/
+examples/
+.editorconfig
+.prettierrc
+.eslintrc
+.eslintignore
+.travis.yml
+.circleci/
+.gitlab-ci.yml
+.github/
+.husky/
+
+# Git files
+.git/
+.gitignore
+
+# Misc
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+coverage/
+.nyc_output/
+*.tgz
+.env
+.env.*
+*.tsbuildinfo
+
+# Include declaration files and source maps
+!dist/*.d.ts
+!dist/**/*.d.ts
+!dist/*.map
+!dist/**/*.map

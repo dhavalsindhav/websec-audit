@@ -1,6 +1,6 @@
 {
   "name": "websec-audit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A universal security scanning and audit tool for websites",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -43,16 +43,16 @@
     "frontend",
     "backend"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Dhaval Sindhav <rajputdhaval009@outlook.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/username/websec-audit.git"
+    "url": "https://github.com/dhavalsindhav/websec-audit.git"
   },
   "bugs": {
-    "url": "https://github.com/username/websec-audit/issues"
+    "url": "https://github.com/dhavalsindhav/websec-audit/issues"
   },
-  "homepage": "https://github.com/username/websec-audit#readme",
+  "homepage": "https://github.com/dhavalsindhav/websec-audit#readme",
   "engines": {
     "node": ">=14.0.0"
   },
@@ -71,6 +71,7 @@
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "dns2": "^2.1.0",
+    "email-validator": "^2.0.4",
     "retire": "^4.1.1",
     "wappalyzer-core": "^6.10.26",
     "whois-json": "^2.0.4"

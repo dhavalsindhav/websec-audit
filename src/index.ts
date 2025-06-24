@@ -18,6 +18,10 @@ export { detectTechStack } from './modules/techStack.js';
 export { scanLibraryVulnerabilities } from './modules/libraryVulnerabilities.js';
 export { scanWaybackMachine } from './modules/waybackMachine.js';
 export { detectFirewall } from './modules/firewall.js';
+export { simplifiedScanTLS } from './modules/tlsScanner.js';
+export { checkBlacklistStatus } from './modules/blacklistChecker.js';
+export { verifyEmail } from './modules/emailVerifier.js';
+export { scanCookieSecurity } from './modules/cookieSecurity.js';
 
 // Re-export browser-only modules
 export * from './frontend/index.js';

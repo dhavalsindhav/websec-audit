@@ -5,6 +5,7 @@ import * as crypto from 'crypto';
 import { promisify } from 'util';
 import { Scanner, ScannerInput, TLSConfigResult } from '../types';
 import { extractDomain, createScannerInput } from '../core/request';
+import * as sslChecker from 'ssl-checker';
 
 // Promisify DNS lookup
 const dnsLookup = promisify(dns.lookup);

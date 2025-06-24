@@ -1,6 +1,9 @@
 # WebSec-Audit
 
-A universal security scanning and audit tool for websites that works in both browser and Node.js environments.
+- 📧 **Email Security** - Verify SPF, DMARC and DKIM records for email security
+- ✉️ **Email Verification** - Validate email format and check for MX records
+- 🔒 **Blacklist Status** - Check if a domain is blacklisted by security services
+- 📝 **Form Detection** - Identify forms and validate their security postureiversal security scanning and audit tool for websites that works in both browser and Node.js environments.
 
 [![npm version](https://img.shields.io/npm/v/websec-audit.svg)](https://www.npmjs.com/package/websec-audit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -13,13 +16,17 @@ WebSec-Audit is a comprehensive security scanning library designed for both clie
 ## Features
 
 - 🛡️ **Security Headers Analysis** - Check for proper implementation of crucial security headers
-- 📝 **Form Detection** - Identify forms and validate their security posture
+- 🍪 **Cookie Security Analysis** - Verify cookie attributes for security best practices
+- 📧 **Email Security** - Verify SPF, DMARC and DKIM records for email security
+- � **Email Verification** - Validate email format and check for MX records
+- 🔒 **Blacklist Status** - Check if a domain is blacklisted by security services
+- �📝 **Form Detection** - Identify forms and validate their security posture
 - 🔎 **Sensitive File Detection** - Scan for exposed sensitive files and directories
 - 🌐 **Subdomain Enumeration** - Discover subdomains associated with the target
 - 🧩 **Technology Detection** - Identify the tech stack, frameworks, and libraries in use
 - 📜 **Library Vulnerability Scanning** - Detect vulnerable frontend libraries
 - 🧱 **Web Application Firewall Detection** - Identify if WAF protection is in place
-- 🔐 **TLS/SSL Configuration Analysis** - Verify proper TLS implementation (Node.js only)
+- 🔐 **TLS/SSL Configuration Analysis** - Verify proper TLS implementation
 - 🔍 **Port Scanning** - Discover open ports on the target (Node.js only)
 - 🔖 **DNS Record Analysis** - Examine DNS configuration (Node.js only)
 - ⏱️ **Historical Content Analysis** - Check archived content via Wayback Machine API
@@ -42,12 +49,16 @@ pnpm add websec-audit
 ### Browser Environment
 
 ```javascript
-import { scanSecurityHeaders, detectForms, detectTechStack } from 'websec-audit';
+import { scanSecurityHeaders, detectForms, detectTechStack, scanCookieSecurity } from 'websec-audit';
 
 async function auditWebsite(url) {
   // Check security headers
   const headers = await scanSecurityHeaders({ target: url });
   console.log(`Security Header Score: ${headers.data.score}/100`);
+  
+  // Check cookie security
+  const cookies = await scanCookieSecurity({ target: url });
+  console.log(`Cookie security: ${cookies.data.overallSecurity}`);
   
   // Detect forms and potential security issues
   const forms = await detectForms({ target: url });
@@ -61,41 +72,54 @@ async function auditWebsite(url) {
 auditWebsite('https://example.com');
 ```
 
-### Node.js Environment
+### Node.js Environment (All Features)
 
 ```javascript
-import { 
-  scanSecurityHeaders 
-} from 'websec-audit';
+import * as websecAudit from 'websec-audit';
 
-import {
-  scanPorts,
-  scanDNSRecords,
-  scanTLS
-} from 'websec-audit/backend';
-
-async function comprehensiveScan(domain) {
-  // Security headers check
-  const headers = await scanSecurityHeaders({ target: `https://${domain}` });
+async function fullSecurityAudit(domain) {
+  // Basic URL scanning
+  const headers = await websecAudit.scanSecurityHeaders({ target: domain });
+  const cookies = await websecAudit.scanCookieSecurity({ target: domain });
+  
+  // Email security checks
+  const emailSecurity = await websecAudit.checkEmailSecurity({ target: domain });
+  console.log(`Email security score: ${emailSecurity.data.overall.securityScore}/100`);
+  
+  // Email validation check
+  const email = `info@${domain}`;
+  const emailVerification = await websecAudit.verifyEmail({ target: email });
+  console.log(`Email valid: ${emailVerification.data.isValid}`);
+  
+  // Check if domain is blacklisted
+  const blacklistStatus = await websecAudit.checkBlacklistStatus({ target: domain });
+  console.log(`Blacklisted: ${blacklistStatus.data.overallStatus.blacklisted}`);
+  
+  // TLS/SSL scanning (simple version works in browsers too)
+  const tlsScan = await websecAudit.simplifiedScanTLS({ target: domain });
+  console.log(`TLS valid: ${tlsScan.data.isValid}`);
+  
+  // Enhanced TLS scanning (Node.js only)
+  const detailedTlsScan = await websecAudit.scanTLS({ target: domain });
+  console.log(`TLS version: ${detailedTlsScan.data.version}`);
+  
+  // DNS records scanning (Node.js only)
+  const dnsRecords = await websecAudit.scanDNSRecords({ target: domain });
+  console.log(`SPF record: ${dnsRecords.data.spf.record || 'Not found'}`);
   
   // Port scanning (Node.js only)
-  const ports = await scanPorts({ target: domain });
-  
-  // DNS analysis (Node.js only)
-  const dns = await scanDNSRecords({ target: domain });
-  
-  // TLS configuration analysis (Node.js only)
-  const tls = await scanTLS({ target: domain });
+  const portScan = await websecAudit.scanPorts({ target: domain });
+  console.log(`Open ports: ${portScan.data.openPorts.map(p => p.port).join(', ')}`);
   
   return {
     headerScore: headers.data.score,
-    openPorts: ports.data.open,
-    dnsRecords: dns.data.records,
-    tlsGrade: tls.data.grade
+    emailSecurity: emailSecurity.data.overall.securityScore,
+    dnsRecords: dnsRecords.data.records,
+    tlsGrade: detailedTlsScan.data.grade
   };
 }
 
-comprehensiveScan('example.com').then(console.log);
+fullSecurityAudit('example.com').then(console.log);
 ```
 
 ## API Documentation

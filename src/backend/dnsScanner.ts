@@ -55,11 +55,32 @@ export const scanDNSRecords: Scanner<DNSRecordResult> = async (
           record: recordStr,
           issues: []
         };
+          // Enhanced SPF validation
+        result.spf.issues = [];
         
-        // Basic SPF validation
-        if (!recordStr.includes('~all') && !recordStr.includes('-all')) {
-          result.spf.issues = ['SPF record does not end with ~all or -all'];
+        // Check for proper termination
+        if (!recordStr.includes('~all') && !recordStr.includes('-all') && !recordStr.includes('?all')) {
+          result.spf.issues.push('SPF record does not end with ~all, -all, or ?all');
           result.spf.valid = false;
+        }
+        
+        // Check for potential issues
+        if (recordStr.includes('+all')) {
+          result.spf.issues.push('SPF record uses +all which allows anyone to send mail claiming to be from your domain');
+          result.spf.valid = false;
+        }
+        
+        // Check for potential complexity issues
+        const parts = recordStr.split(' ');
+        const includeCount = parts.filter(p => p.startsWith('include:')).length;
+        
+        if (includeCount > 10) {
+          result.spf.issues.push(`SPF record has ${includeCount} include mechanisms which may exceed the 10 DNS lookup limit`);
+        }
+        
+        // Check if record exceeds size limit (recommended is under 450 bytes)
+        if (recordStr.length > 450) {
+          result.spf.issues.push(`SPF record is ${recordStr.length} bytes long which exceeds the recommended 450 bytes and may be truncated`);
         }
       }
     } catch (error) {
@@ -101,12 +122,21 @@ export const scanDNSRecords: Scanner<DNSRecordResult> = async (
       result.dmarc.exists = false;
       result.dmarc.issues = ['Failed to retrieve DMARC record'];
     }
-    
-    // Check DKIM (basic check for common selectors)
-    const commonSelectors = ['default', 'google', 'selector1', 'selector2', 'k1'];
+      // Check DKIM (enhanced check for common selectors)
+    const commonSelectors = [
+      'default', 'google', 'selector1', 'selector2', 'k1', 'dkim', 
+      'mail', 'email', 'outlook', 'amazonses', 'mandrill', 'sendgrid',
+      '20161025', 'mailjet', 'zoho'
+    ];
     const dkimResults: string[] = [];
     
-    for (const selector of commonSelectors) {
+    // If custom selectors are provided in options, use them too
+    const customSelectors = normalizedInput.options?.dkimSelectors as string[] | undefined;
+    const selectorsToCheck = customSelectors 
+      ? [...commonSelectors, ...customSelectors]
+      : commonSelectors;
+    
+    for (const selector of selectorsToCheck) {
       try {
         const dkimRecords = await resolveTxt(`${selector}._domainkey.${domain}`);
         if (dkimRecords && dkimRecords.length > 0) {

@@ -6,6 +6,7 @@
 export { scanTLS } from './TLS_SSL_Scanner.js';
 export { scanDNSRecords } from './dnsScanner.js';
 export { scanPorts } from './portScanner.js';
+export { checkEmailSecurity } from '../modules/emailSecurity.js';
 
 // Re-export core utilities needed by backend
 export { makeRequest } from '../core/request';
